@@ -1,4 +1,5 @@
 # Summary
 
 [Introduction](README.md)
-- [TinyRenderer](tinyRenderer/tinyRenderer.md)
+[TinyRenderer]()
+- [TinyRenderer-lesson1](tinyRenderer/tinyRenderer_lesson1.md)
