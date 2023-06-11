@@ -1,4 +1,4 @@
-## [tinyRenderer笔记](https://github.com/ssloy/tinyrenderer/wiki/Lesson-1:-Bresenham%E2%80%99s-Line-Drawing-Algorithm)
+## [tinyRenderer笔记-lesson1](https://github.com/ssloy/tinyrenderer/wiki/Lesson-1:-Bresenham%E2%80%99s-Line-Drawing-Algorithm)
 ### 最简单的画线实现
 * 简单步进, 划分100，每次步进一点点，最后画条线
 ![first_attempt](image/first_attempt.png)
