@@ -40,7 +40,7 @@ triangle(vec2 points[3]) {
     * 101那边的定义更好理解：给定一个三角形ABC，这个三角形坐在的2维平面的任意一点都可以表示成三个顶点坐标的线性组合linear combs,只要线性组合的系数和=1
     * 三角形内的任意点P，表示成：\\(P=(1-u-v)A + uB + vC\\)
     * 文中另一个描述是：只要我们想象，放了3个重量1-u-v,u,v到点ABC上，那么三个点的重心，就在点P上。
-    * `TODO:不懂`也可以说点P has coordinates(u,v)，in the (oblique) basis \\(A, u\vec{AB}, u\vec{AC}\\)
+    * `TODO:不懂`也可以说点P has coordinates(u,v)，in the (oblique) basis \\((A, u\vec{AB}, u\vec{AC})\\)
     * \\(P = A + u\vec{AB} +v\vec{AC}\\)
     * 这里的图有点没看懂，找的uv1和Abx Acx PAx和ABy ACy PAy同时正交：正交是说转置等于逆，那这里是什么意思，看了一下附赠链接，这里的正交就是说，是垂直
     * 要在平面上找到两个线的交点，只需要计算一个叉积
