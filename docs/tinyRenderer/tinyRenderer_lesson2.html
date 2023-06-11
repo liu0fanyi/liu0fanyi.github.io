@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Larning</title>
-        <meta name="robots" content="noindex" />
+        <title>TinyRenderer-lesson2 - Larning</title>
 
 
         <!-- Custom HTML head -->
@@ -13,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -38,7 +37,7 @@
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -86,7 +85,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><div>TinyRenderer</div></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson1.html"><strong aria-hidden="true">1.</strong> TinyRenderer-lesson1</a></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson2.html"><strong aria-hidden="true">2.</strong> TinyRenderer-lesson2</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><div>TinyRenderer</div></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson1.html"><strong aria-hidden="true">1.</strong> TinyRenderer-lesson1</a></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson2.html" class="active"><strong aria-hidden="true">2.</strong> TinyRenderer-lesson2</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -118,7 +117,7 @@
                     <h1 class="menu-title">Larning</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
 
@@ -147,196 +146,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="tinyrenderer笔记-lesson1"><a class="header" href="#tinyrenderer笔记-lesson1"><a href="https://github.com/ssloy/tinyrenderer/wiki/Lesson-1:-Bresenham%E2%80%99s-Line-Drawing-Algorithm">tinyRenderer笔记-lesson1</a></a></h2>
-<h3 id="最简单的画线实现"><a class="header" href="#最简单的画线实现">最简单的画线实现</a></h3>
-<ul>
-<li>简单步进, 划分100，每次步进一点点，最后画条线
-<img src="tinyRenderer/image/first_attempt.png" alt="first_attempt" /></li>
-<li>问题：低效，依赖于步进长度，如果线很长，步进长度短会出现大裂缝(采样不足)
-<img src="tinyRenderer/image/first_attempt_problem.png" alt="first_attempt_problem" /></li>
-</ul>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>void line(int x0, int y0, int x1, int y1, TGAImage &amp;image, TGAColor color) { 
-    for (float t=0.; t&lt;1.; t+=.01) { 
-        int x = x0 + (x1-x0)*t; 
-        int y = y0 + (y1-y0)*t; 
-        image.set(x, y, color); 
-    } 
-}
-<span class="boring">}</span></code></pre></pre>
-<h3 id="second"><a class="header" href="#second">second</a></h3>
-<ul>
-<li>步进长度其实很容易得到，这里用x的的步进作为实际步进长度，但是这有错误(erroneous)</li>
-<li>计算当前步进比例<code>t</code></li>
-<li><code>y = y0 + (y1 - y0) * t</code></li>
-<li>问题：一条线正常，另一条有洞，没有第三条线
-<ul>
-<li>第一条和第三条，是相同两条线，只是颜色不同，方向不同，目前处理不了
-<img src="tinyRenderer/image/second_attempt.png" alt="second_attempt" /></li>
-</ul>
-</li>
-</ul>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>void line(int x0, int y0, int x1, int y1, TGAImage &amp;image, TGAColor color) { 
-    for (int x=x0; x&lt;=x1; x++) { 
-        float t = (x-x0)/(float)(x1-x0); 
-        int y = y0*(1.-t) + y1*t; 
-        image.set(x, y, color); 
-    } 
-}
-
-line(13, 20, 80, 40, image, white); 
-line(20, 13, 40, 80, image, red); 
-line(80, 40, 13, 20, image, red);
-<span class="boring">}</span></code></pre></pre>
-<h3 id="third"><a class="header" href="#third">third</a></h3>
-<ul>
-<li>上面红线有洞是因为，纵向y比横向x大，导致采样不足，需要哪个大用哪个作为步进长度，这里的操作是如果steep，交换x和y，</li>
-<li>然后保证前后两点前面的x比后面的小，就是大了就交换一下</li>
-<li>问题：到这里为止已经基本能保证画线的需求，但是效率不高
-<img src="tinyRenderer/image/third_attempt.png" alt="third_attempt" /></li>
-</ul>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>void line(int x0, int y0, int x1, int y1, TGAImage &amp;image, TGAColor color) { 
-    bool steep = false; 
-    if (std::abs(x0-x1)&lt;std::abs(y0-y1)) { // if the line is steep, we transpose the image 
-        std::swap(x0, y0); 
-        std::swap(x1, y1); 
-        steep = true; 
-    } 
-    if (x0&gt;x1) { // make it left−to−right 
-        std::swap(x0, x1); 
-        std::swap(y0, y1); 
-    } 
-    for (int x=x0; x&lt;=x1; x++) { 
-        float t = (x-x0)/(float)(x1-x0); 
-        int y = y0*(1.-t) + y1*t; 
-        if (steep) { 
-            image.set(y, x, color); // if transposed, de−transpose 
-        } else { 
-            image.set(x, y, color); 
-        } 
-    } 
-}
-<span class="boring">}</span></code></pre></pre>
-<h2 id="timings-fourth-attempt"><a class="header" href="#timings-fourth-attempt">Timings: fourth attempt</a></h2>
-<ul>
-<li>由于使用bevy实现上面的图像，导致这里的benchmark没法做</li>
-<li>只做了阅读理解
-<ul>
-<li>目前代码有太多的<code>除法</code></li>
-<li>没有做assets和check on going beyond the borders，就是需要<code>错误处理</code>和<code>边界判断</code></li>
-<li>优化很危险，应该清楚理解代码会运行的平台。是在优化<code>graphics card</code>或者<code>just for CPU</code>，这两者完全不同。</li>
-<li>代码需要<code>profiled</code></li>
-<li>经过测试，<code>10%在copy color</code>，<code>70%在调用上面的画线程序</code>，这里就是需要优化的部分</li>
-</ul>
-</li>
-</ul>
-<h2 id="fourth-attempt-continued"><a class="header" href="#fourth-attempt-continued">Fourth attempt continued</a></h2>
-<ul>
-<li>每一次除法，都有相同的除数<code>(x1 - x0)</code>，拿到外边</li>
-<li>设立一个error variable，告诉我the distance to the best straight line from out current (x,y) pixel,we increase (or decrease) y by one, and decrease the error by one as well。
-<ul>
-<li>个人理解，首先for循环是<code>步进dx的长度</code>，所以derror是<code>dy / dx</code>，也就是对于每次<code>前进一次x，应该前进多少y</code>,而这里<code>y是int</code>形，所有<code>只有在error &gt; .5</code>的时候，<code>y需要增加步进长度</code>，这里<code>为啥就不太清楚了</code>，有点像是四舍五入，或者是某种数值计算优化，然后<code>error会自己减掉一次步进长度</code>因为这个<code>步进长度已经被y使用了</code></li>
-</ul>
-</li>
-<li>由于没有<code>除法</code>，<code>line</code>的效率和<code>set Image</code> 的效率差不多了</li>
-</ul>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>void line(int x0, int y0, int x1, int y1, TGAImage &amp;image, TGAColor color) { 
-    bool steep = false; 
-    if (std::abs(x0-x1)&lt;std::abs(y0-y1)) { 
-        std::swap(x0, y0); 
-        std::swap(x1, y1); 
-        steep = true; 
-    } 
-    if (x0&gt;x1) { 
-        std::swap(x0, x1); 
-        std::swap(y0, y1); 
-    } 
-    int dx = x1-x0; 
-    int dy = y1-y0; 
-    float derror = std::abs(dy/float(dx)); 
-    float error = 0; 
-    int y = y0; 
-    for (int x=x0; x&lt;=x1; x++) { 
-        if (steep) { 
-            image.set(y, x, color); 
-        } else { 
-            image.set(x, y, color); 
-        } 
-        error += derror; 
-        if (error&gt;.5) { 
-            y += (y1&gt;y0?1:-1); 
-            error -= 1.; 
-        } 
-    } 
-} 
-<span class="boring">}</span></code></pre></pre>
-<h2 id="timings-fifth-and-final-attempt"><a class="header" href="#timings-fifth-and-final-attempt">Timings: fifth and final attempt</a></h2>
-<ul>
-<li>这里<code>消除float的使用</code>，添加了一个<code>derror2</code>，然后思路和上面其实差不多，就是<code>整体*2dx</code></li>
-<li>这样之后<code>set_image</code>操作的时长已经超过了<code>line</code>操作</li>
-</ul>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>void line(int x0, int y0, int x1, int y1, TGAImage &amp;image, TGAColor color) { 
-    bool steep = false; 
-    if (std::abs(x0-x1)&lt;std::abs(y0-y1)) { 
-        std::swap(x0, y0); 
-        std::swap(x1, y1); 
-        steep = true; 
-    } 
-    if (x0&gt;x1) { 
-        std::swap(x0, x1); 
-        std::swap(y0, y1); 
-    } 
-    int dx = x1-x0; 
-    int dy = y1-y0; 
-    int derror2 = std::abs(dy)*2; 
-    int error2 = 0; 
-    int y = y0; 
-    for (int x=x0; x&lt;=x1; x++) { 
-        if (steep) { 
-            image.set(y, x, color); 
-        } else { 
-            image.set(x, y, color); 
-        } 
-        error2 += derror2; 
-        if (error2 &gt; dx) { 
-            y += (y1&gt;y0?1:-1); 
-            error2 -= dx*2; 
-        } 
-    } 
-} 
-<span class="boring">}</span></code></pre></pre>
-<ul>
-<li><a href="https://github.com/ssloy/tinyrenderer/issues/28">一些额外的优化</a>
-<ul>
-<li>比如其中将<code>对于steep的判断，移到了for的外面</code>，进一步降低了时间</li>
-<li>并提到将<code>y1&gt;y0? 1:-1也转移到for外面</code>，也能降低时间</li>
-<li>又提到现在的<code>编译器会做相关的优化</code>，因而这几步操作：<code>虽然值得有相关的意识，但现在已经没有那么必要</code>，毕竟会降低代码的可读性和复用性</li>
-</ul>
-</li>
-</ul>
-<h2 id="wireframe-rendering"><a class="header" href="#wireframe-rendering">Wireframe rendering</a></h2>
-<ul>
-<li>这里需要下载他提供的<code>obj文件</code></li>
-<li>用bevy直接读入，并<code>parse v和f</code>，<code>f</code>是取所有的三大块里的第一小块重新组合，得注意读题...</li>
-<li>然后用line画出来</li>
-<li>使用<code>bevy</code>遇到的<code>问题</code>:
-<ul>
-<li>bevy的image的<code>起点在左上角，这里在左下角</code>，画图的时候需要特殊处理</li>
-<li><code>obj文件</code>里会<code>同时出现0点和800点</code>，也就是当我<code>设置图片大小是800</code>的时候，obj文件里的<code>800会out of index</code>，需要特殊处理</li>
-</ul>
-</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="tinyrenderer笔记-lesson2"><a class="header" href="#tinyrenderer笔记-lesson2"><a href="https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling">tinyRenderer笔记-lesson2</a></a></h2>
+                        <h2 id="tinyrenderer笔记-lesson2"><a class="header" href="#tinyrenderer笔记-lesson2"><a href="https://github.com/ssloy/tinyrenderer/wiki/Lesson-2:-Triangle-rasterization-and-back-face-culling">tinyRenderer笔记-lesson2</a></a></h2>
 <h2 id="old-school-method-line-sweeping-线扫就是一行一行画线完成一个三角形绘制"><a class="header" href="#old-school-method-line-sweeping-线扫就是一行一行画线完成一个三角形绘制">old-school method: Line sweeping 线扫，就是一行一行画线完成一个三角形绘制</a></h2>
 <ul>
 <li>
@@ -362,12 +172,12 @@ line(80, 40, 13, 20, image, red);
 <p><code>提问：哪一个segment是左边的，哪一个是右边的</code></p>
 <ul>
 <li>假设有<code>t0,t1,t2三个点</code>，按<code>y ascending 排序</code>，则<code>boundary A 是t0-t2，boundary B 是t0-t1 和t1-t2</code></li>
-<li><img src="tinyRenderer/image/boundaryAB.png" alt="" /></li>
+<li><img src="image/boundaryAB.png" alt="" /></li>
 <li>这里边界<code>boundary A 是红色的</code>，<code>boundary B 是绿色的</code></li>
 <li>目前<code>boundary B 是两个部分</code>，现在要画bottom half of the triangle by cutting it horizontally，水平切一刀，切成两半，就是切两个绿线连接的那个点，<code>将三角形分成上下两半分别绘制</code></li>
 <li>首先画了<code>下三角形</code>，但是并没有做之前line的那些操作，为了让线段连续，交换xy啥的。因为之后要做三角形的填充，而填充后就看不见线了，无所谓连续</li>
 <li>然后就是上下分别填充的代码，放到一起，得到三个填充颜色后的彩色三角形</li>
-<li><img src="tinyRenderer/image/trianglefilled.png" alt="" /></li>
+<li><img src="image/trianglefilled.png" alt="" /></li>
 </ul>
 </li>
 </ul>
@@ -420,6 +230,9 @@ line(80, 40, 13, 20, image, red);
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tinyRenderer/tinyRenderer_lesson1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
 
                         <div style="clear: both"></div>
@@ -428,6 +241,9 @@ line(80, 40, 13, 20, image, red);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tinyRenderer/tinyRenderer_lesson1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
             </nav>
 
@@ -441,23 +257,16 @@ line(80, 40, 13, 20, image, red);
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 
-        <script>
-        window.addEventListener('load', function() {
-            MathJax.Hub.Register.StartupHook('End', function() {
-                window.setTimeout(window.print, 100);
-            });
-        });
-        </script>
 
     </div>
     </body>
