@@ -40,9 +40,19 @@ triangle(vec2 points[3]) {
     * 101那边的定义更好理解：给定一个三角形ABC，这个三角形坐在的2维平面的任意一点都可以表示成三个顶点坐标的线性组合linear combs,只要线性组合的系数和=1
     * 三角形内的任意点P，表示成：\\(P=(1-u-v)A + uB + vC\\)
     * 文中另一个描述是：只要我们想象，放了3个重量1-u-v,u,v到点ABC上，那么三个点的重心，就在点P上。
-    * `TODO:不懂`也可以说点P has coordinates(u,v)，in the (oblique) basis \\((A, u\vec{AB}, u\vec{AC})\\)
+    * `TODO:不懂`也可以说点P has coordinates(u,v)，in the (oblique) basis \\((A, u\vec{AB}, u\vec{AC})\\)，这里看到的就是，式子展开，可以把点A-点B看成向量AB，得到下面个式子比较自然，但是coordinates(u,v) in basis的说法没有理解
     * \\(P = A + u\vec{AB} +v\vec{AC}\\)
-    * 这里的图有点没看懂，找的uv1和Abx Acx PAx和ABy ACy PAy同时正交：正交是说转置等于逆，那这里是什么意思，看了一下附赠链接，这里的正交就是说，是垂直
+    * 所以进一步简化，就是找\\( u\vec{AB} + v\vec{AC} + \vec{PA} = \vec{0}\\)
+    * 可以拆分成x方向和y方向的而两个equations
+    * \\[$$
+\begin{equation*}
+\begin{cases}
+u\overrightarrow{AB_{x}} & +\ u\overrightarrow{AC_{x}} +\ \overrightarrow{PA_{x}} \ =\ 0\\
+u\overrightarrow{AB_{y}} & +\ u\overrightarrow{AC_{y}} +\ \overrightarrow{PAy} \ =\ 0
+\end{cases}
+\end{equation*}
+$$\\]
+    这里的图有点没看懂，找的uv1和Abx Acx PAx和ABy ACy PAy同时正交：正交是说转置等于逆，那这里是什么意思，看了一下附赠链接，这里的正交就是说，是垂直
     * 要在平面上找到两个线的交点，只需要计算一个叉积
 
 * the polygon is illuminated most brightly when it is orthogonal to the light direction垂直照射，多边形最亮
