@@ -47,7 +47,7 @@ triangle(vec2 points[3]) {
     * \\[$$
 \begin{equation*}
 \begin{cases}
-u\overrightarrow{AB_{x}} & +\ u\overrightarrow{AC_{x}} +\ \overrightarrow{PA_{x}} \ =\ 0\\
+u\overrightarrow{AB_{x}} & +\ u\overrightarrow{AC_{x}} +\ \overrightarrow{PA_{x}} \ =\ 0\\\\
 u\overrightarrow{AB_{y}} & +\ u\overrightarrow{AC_{y}} +\ \overrightarrow{PAy} \ =\ 0
 \end{cases}
 \end{equation*}
