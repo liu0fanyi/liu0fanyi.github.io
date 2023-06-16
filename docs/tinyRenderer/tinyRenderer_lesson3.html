@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Page not found - Larning</title>
-        <base href="/">
+        <title>TinyRenderer-lesson3 - Larning</title>
 
 
         <!-- Custom HTML head -->
@@ -13,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -38,7 +37,7 @@
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -86,7 +85,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><div>TinyRenderer</div></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson1.html"><strong aria-hidden="true">1.</strong> TinyRenderer-lesson1</a></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson2.html"><strong aria-hidden="true">2.</strong> TinyRenderer-lesson2</a></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson3.html"><strong aria-hidden="true">3.</strong> TinyRenderer-lesson3</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><div>TinyRenderer</div></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson1.html"><strong aria-hidden="true">1.</strong> TinyRenderer-lesson1</a></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson2.html"><strong aria-hidden="true">2.</strong> TinyRenderer-lesson2</a></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson3.html" class="active"><strong aria-hidden="true">3.</strong> TinyRenderer-lesson3</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -118,7 +117,7 @@
                     <h1 class="menu-title">Larning</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
 
@@ -147,13 +146,74 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="document-not-found-404"><a class="header" href="#document-not-found-404">Document not found (404)</a></h1>
-<p>This URL is invalid, sorry. Please use the navigation bar or search to continue.</p>
+                        <h2 id="tinyrenderer笔记-lesson3"><a class="header" href="#tinyrenderer笔记-lesson3"><a href="https://github.com/ssloy/tinyrenderer/wiki/Lesson-3:-Hidden-faces-removal-(z-buffer)">tinyRenderer笔记-lesson3</a></a></h2>
+<h2 id="z-buffer-introduction"><a class="header" href="#z-buffer-introduction">z-buffer introduction</a></h2>
+<ul>
+<li>get rid of 摆脱 the visual artifacts 手工艺品 of the hidden faces removal we had</li>
+<li>如果从后边往前画三角，可以不丢失任何一个三角，后面会覆盖前面的，就像画油画</li>
+<li>画家算法理论上可以通过从后向前逐层绘制三角面来避免面消隐,但它有几个重大问题:</li>
+</ul>
+<ol>
+<li>计算成本高。每次相机视角变化都需要重新排序整个场景,这在复杂场景下代价很大。</li>
+<li>无法处理动态场景。如果场景对象在运动,绘制顺序也在变化,画家算法无法高效地处理这种情况。</li>
+<li>无法确定正确顺序。有时候很难确定三角面正确的绘制顺序,从而导致面消隐现象。</li>
+</ol>
+<h2 id="let-us-try-to-render-a-simple-scene"><a class="header" href="#let-us-try-to-render-a-simple-scene">Let us try to render a simple scene</a></h2>
+<ul>
+<li>假设从上往下看三个穿插的三角形</li>
+<li>三维情况如下
+<ul>
+<li><img src="image/triangles_three_from_top.png" alt="" /></li>
+</ul>
+</li>
+<li>从上方看的渲染结果如下
+<ul>
+<li><img src="image/triangles_three_from_top_real.png" alt="" /></li>
+</ul>
+</li>
+<li>blue部分在red前面，三个都有穿插，先画哪个都不对</li>
+</ul>
+<ol>
+<li>画家算法无法在这个例子中工作,需要通过细致的空间分割来判断triangle之间的相对位置。</li>
+<li>BSP树可以实现这种空间分割,但代价太高,难以在实时渲染中使用。</li>
+<li>理想的解决方案应更加高效,避免过度依赖细致的空间分割。Z缓冲算过为每个像素记录最近的面实现了这一点,这也是它相比BSP树更加实用的原因。</li>
+</ol>
+<h2 id="even-simpler-let-us-lose-a-dimension-y-buffer"><a class="header" href="#even-simpler-let-us-lose-a-dimension-y-buffer">Even simpler: let us lose a dimension. Y-buffer</a></h2>
+<ul>
+<li>用黄色切割上面的立体图，直接干成二维的，只看切割的这条线
+<ul>
+<li><img src="image/triangles_three_from_top_add_yellow.png" alt="" /></li>
+<li><img src="image/triangles_three_from_top_add_yellow_line.png" alt="" /></li>
+</ul>
+</li>
+<li>our scene 是二维，所以用line()简单画了一下</li>
+<li>实际显示的是从sideway，侧面看到的三角形和黄色平面的交线</li>
+<li>开始render。render是1pixel height。代码里实际上是16pixels,为了在高分辨率的屏幕下也能看清楚。</li>
+<li>rasterize() writes only in the first line of the image render。</li>
+<li>这里定义了一个magic array <code>ybuffer</code> with dimensions(width, 1)，用minus infinity 初始化。</li>
+<li>然后调用rasterize() 渲染，</li>
+<li>很简单：遍历所有的x-coordinates，在p0.x和p1.x之间，计算，corresponding(相应) y-coordinate of the segment。然后检查我们在ybuffer里根据当前的xindex得到了什么。如果y-value 离camera的距离更近，则y-value更新为ybuffer，然后draw it on the screen and update the ybuffer。</li>
+<li>下面提供了一下过程，step-by-step，在第一次调用rasterize() on the first (red) segment this is our memory</li>
+<li>红色从左到右，表示距离由远到近，然后覆盖绿色，因为绿色更近，因而覆盖，然后蓝色，由于蓝色部分更近，因而无法完全覆盖</li>
+</ul>
+<h2 id="回到3d"><a class="header" href="#回到3d">回到3d</a></h2>
+<ul>
+<li>回到2d，z-buffer是二维的，记录每一个x,y的z深度</li>
+<li>最复杂的部分是计算z-value of a pixel</li>
+<li>看回y的那部分代码，其实在算的是barycentric坐标 * 所以every pixel，we want to draw simply to multiply its barycentric coordinates by the z-values of the vertices of the triangle we rasterize，就是每个坐标，都用z值乘重心坐标</li>
+</ul>
+<h2 id="后面留了贴纹理的作业但不晓得咋读tga放弃了"><a class="header" href="#后面留了贴纹理的作业但不晓得咋读tga放弃了">后面留了贴纹理的作业，但不晓得咋读tga，放弃了</a></h2>
+<ul>
+<li>参考下下一节课的代码</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tinyRenderer/tinyRenderer_lesson2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
 
                         <div style="clear: both"></div>
@@ -162,6 +222,9 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tinyRenderer/tinyRenderer_lesson2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
             </nav>
 
@@ -175,13 +238,13 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
 

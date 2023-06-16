@@ -86,7 +86,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><div>TinyRenderer</div></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson1.html"><strong aria-hidden="true">1.</strong> TinyRenderer-lesson1</a></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson2.html"><strong aria-hidden="true">2.</strong> TinyRenderer-lesson2</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><div>TinyRenderer</div></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson1.html"><strong aria-hidden="true">1.</strong> TinyRenderer-lesson1</a></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson2.html"><strong aria-hidden="true">2.</strong> TinyRenderer-lesson2</a></li><li class="chapter-item expanded "><a href="tinyRenderer/tinyRenderer_lesson3.html"><strong aria-hidden="true">3.</strong> TinyRenderer-lesson3</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -410,20 +410,108 @@ u\overrightarrow{AB_{x}} &amp; +\ u\overrightarrow{AC_{x}} +\ \overrightarrow{PA
 u\overrightarrow{AB_{y}} &amp; +\ u\overrightarrow{AC_{y}} +\ \overrightarrow{PAy} \ =\ 0
 \end{cases}
 \end{equation*}
-$$\]
-这里的图有点没看懂，找的uv1和Abx Acx PAx和ABy ACy PAy同时正交：正交是说转置等于逆，那这里是什么意思，看了一下附赠链接，这里的正交就是说，是垂直</li>
-<li>要在平面上找到两个线的交点，只需要计算一个叉积</li>
+$$\]</li>
+<li>写成矩阵形式:</li>
+<li>\[$$
+\begin{equation*}
+\begin{cases}
+\begin{bmatrix}
+u &amp; v &amp; 1
+\end{bmatrix} &amp; \begin{bmatrix}
+\overrightarrow{AB_{x}}\
+\overrightarrow{AC_{x}}\
+\overrightarrow{PA_{x}}
+\end{bmatrix} \ =\ 0\
+\begin{bmatrix}
+u &amp; v &amp; 1
+\end{bmatrix} &amp; \begin{bmatrix}
+\overrightarrow{AB_{y}}\
+\overrightarrow{AC_{y}}\
+\overrightarrow{PA_{y}}
+\end{bmatrix} \ =\ 0
+\end{cases}
+\end{equation*}
+$$\]</li>
+<li>所以要找的是一个(u, v, 1)向量，同时垂直于ABx,ACx,PAx和ABy,ACy,PAy这两个向量，就是原本两点形成向量，现在三个向量的分量形成了新的向量，容易迷糊=_=，所以只需要求个cross，叉积，就能得到uv1这个向量</li>
+<li>所以现在在那个包围盒bounding box里的所有pixel都求一个重心坐标，如果其中有一个点是负值，说明这个点在三角形外，则不画出来
+*实际代码操作，求出包围盒左下角右上角，通过遍历所有pixel，然后做一个clamp，确定不会超出屏幕，然后做画三角操作</li>
 </ul>
 </li>
-<li>
-<p>the polygon is illuminated most brightly when it is orthogonal to the light direction垂直照射，多边形最亮</p>
+</ul>
+<h2 id="flat-shading-render"><a class="header" href="#flat-shading-render">flat shading render</a></h2>
+<ul>
+<li>首先尝试用随机颜色填充了三角形：这之后提供的代码没有使用那个<code>方法2</code>画线，那个应该对<code>点的顺序有要求</code>，没有提，<code>TODO:暂时没能成功用方法2画出彩色填充model</code></li>
+<li><code>现在添加光</code>
+<ul>
+<li>the polygon is illuminated most brightly when it is orthogonal to the light direction垂直照射，多边形最亮</li>
+<li>如果平行，那将一点光没有。</li>
+<li>总结，the intensity of illumination is equal to the scalar product of the light vector and the normal to the giben triangle.the normal to the triangle can be calculated simply as the cross product of its two sides，叉积乘出三角形的垂直向量，然后与光入射向量做点积得出入射角度</li>
+<li>这个课程perform linear computations on the colors，认为color线性增长，但其实128的color并非half as bright as 255， 忽略了其中的误差</li>
+<li>dot product可以为负值negative。这说明光的入射角度在polygon的下方，我们可以直接丢弃相关的三角，可以允许我们快速的删除一些看不见的三角，这叫做<code>[Back-face culling](http://en.wikipedia.org/wiki/Back-face_culling)</code></li>
+<li><img src="tinyRenderer/image/model_light_hole.png" alt="" /></li>
+<li>注意嘴唇那里有inner cavity of the mouth is drawn on top of the lips.由于dirty clipping of invisible triangles：这种clipping只对convex shapes，凸起的形状 only。将get rid of 摆脱 这种artifact人工造物，当使用z-buffer的时候</li>
+</ul>
 </li>
-<li>
-<p>总结，the intensity of illumination is equal to the scalar product of the light vector and the normal to the giben triangle.the normal to the triangle can be calculated simply as the cross product of its two sides，叉积乘出三角形的垂直向量，然后与光向量做点积得出入射角度</p>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="tinyrenderer笔记-lesson3"><a class="header" href="#tinyrenderer笔记-lesson3"><a href="https://github.com/ssloy/tinyrenderer/wiki/Lesson-3:-Hidden-faces-removal-(z-buffer)">tinyRenderer笔记-lesson3</a></a></h2>
+<h2 id="z-buffer-introduction"><a class="header" href="#z-buffer-introduction">z-buffer introduction</a></h2>
+<ul>
+<li>get rid of 摆脱 the visual artifacts 手工艺品 of the hidden faces removal we had</li>
+<li>如果从后边往前画三角，可以不丢失任何一个三角，后面会覆盖前面的，就像画油画</li>
+<li>画家算法理论上可以通过从后向前逐层绘制三角面来避免面消隐,但它有几个重大问题:</li>
+</ul>
+<ol>
+<li>计算成本高。每次相机视角变化都需要重新排序整个场景,这在复杂场景下代价很大。</li>
+<li>无法处理动态场景。如果场景对象在运动,绘制顺序也在变化,画家算法无法高效地处理这种情况。</li>
+<li>无法确定正确顺序。有时候很难确定三角面正确的绘制顺序,从而导致面消隐现象。</li>
+</ol>
+<h2 id="let-us-try-to-render-a-simple-scene"><a class="header" href="#let-us-try-to-render-a-simple-scene">Let us try to render a simple scene</a></h2>
+<ul>
+<li>假设从上往下看三个穿插的三角形</li>
+<li>三维情况如下
+<ul>
+<li><img src="tinyRenderer/image/triangles_three_from_top.png" alt="" /></li>
+</ul>
 </li>
-<li>
-<p>这个课程perform linear computations on the colors，认为color线性增长，但其实128的color并非half as bright as 255， 忽略了其中的误差</p>
+<li>从上方看的渲染结果如下
+<ul>
+<li><img src="tinyRenderer/image/triangles_three_from_top_real.png" alt="" /></li>
+</ul>
 </li>
+<li>blue部分在red前面，三个都有穿插，先画哪个都不对</li>
+</ul>
+<ol>
+<li>画家算法无法在这个例子中工作,需要通过细致的空间分割来判断triangle之间的相对位置。</li>
+<li>BSP树可以实现这种空间分割,但代价太高,难以在实时渲染中使用。</li>
+<li>理想的解决方案应更加高效,避免过度依赖细致的空间分割。Z缓冲算过为每个像素记录最近的面实现了这一点,这也是它相比BSP树更加实用的原因。</li>
+</ol>
+<h2 id="even-simpler-let-us-lose-a-dimension-y-buffer"><a class="header" href="#even-simpler-let-us-lose-a-dimension-y-buffer">Even simpler: let us lose a dimension. Y-buffer</a></h2>
+<ul>
+<li>用黄色切割上面的立体图，直接干成二维的，只看切割的这条线
+<ul>
+<li><img src="tinyRenderer/image/triangles_three_from_top_add_yellow.png" alt="" /></li>
+<li><img src="tinyRenderer/image/triangles_three_from_top_add_yellow_line.png" alt="" /></li>
+</ul>
+</li>
+<li>our scene 是二维，所以用line()简单画了一下</li>
+<li>实际显示的是从sideway，侧面看到的三角形和黄色平面的交线</li>
+<li>开始render。render是1pixel height。代码里实际上是16pixels,为了在高分辨率的屏幕下也能看清楚。</li>
+<li>rasterize() writes only in the first line of the image render。</li>
+<li>这里定义了一个magic array <code>ybuffer</code> with dimensions(width, 1)，用minus infinity 初始化。</li>
+<li>然后调用rasterize() 渲染，</li>
+<li>很简单：遍历所有的x-coordinates，在p0.x和p1.x之间，计算，corresponding(相应) y-coordinate of the segment。然后检查我们在ybuffer里根据当前的xindex得到了什么。如果y-value 离camera的距离更近，则y-value更新为ybuffer，然后draw it on the screen and update the ybuffer。</li>
+<li>下面提供了一下过程，step-by-step，在第一次调用rasterize() on the first (red) segment this is our memory</li>
+<li>红色从左到右，表示距离由远到近，然后覆盖绿色，因为绿色更近，因而覆盖，然后蓝色，由于蓝色部分更近，因而无法完全覆盖</li>
+</ul>
+<h2 id="回到3d"><a class="header" href="#回到3d">回到3d</a></h2>
+<ul>
+<li>回到2d，z-buffer是二维的，记录每一个x,y的z深度</li>
+<li>最复杂的部分是计算z-value of a pixel</li>
+<li>看回y的那部分代码，其实在算的是barycentric坐标 * 所以every pixel，we want to draw simply to multiply its barycentric coordinates by the z-values of the vertices of the triangle we rasterize，就是每个坐标，都用z值乘重心坐标</li>
+</ul>
+<h2 id="后面留了贴纹理的作业但不晓得咋读tga放弃了"><a class="header" href="#后面留了贴纹理的作业但不晓得咋读tga放弃了">后面留了贴纹理的作业，但不晓得咋读tga，放弃了</a></h2>
+<ul>
+<li>参考下下一节课的代码</li>
 </ul>
 
                     </main>

@@ -52,9 +52,39 @@ u\overrightarrow{AB_{y}} & +\ u\overrightarrow{AC_{y}} +\ \overrightarrow{PAy} \
 \end{cases}
 \end{equation*}
 $$\\]
-    这里的图有点没看懂，找的uv1和Abx Acx PAx和ABy ACy PAy同时正交：正交是说转置等于逆，那这里是什么意思，看了一下附赠链接，这里的正交就是说，是垂直
-    * 要在平面上找到两个线的交点，只需要计算一个叉积
+    * 写成矩阵形式:
+    * \\[$$
+\begin{equation*}
+\begin{cases}
+\begin{bmatrix}
+u & v & 1
+\end{bmatrix} & \begin{bmatrix}
+\overrightarrow{AB_{x}}\\
+\overrightarrow{AC_{x}}\\
+\overrightarrow{PA_{x}}
+\end{bmatrix} \ =\ 0\\
+\begin{bmatrix}
+u & v & 1
+\end{bmatrix} & \begin{bmatrix}
+\overrightarrow{AB_{y}}\\
+\overrightarrow{AC_{y}}\\
+\overrightarrow{PA_{y}}
+\end{bmatrix} \ =\ 0
+\end{cases}
+\end{equation*}
+    $$\\]
+    * 所以要找的是一个(u, v, 1)向量，同时垂直于ABx,ACx,PAx和ABy,ACy,PAy这两个向量，就是原本两点形成向量，现在三个向量的分量形成了新的向量，容易迷糊=_=，所以只需要求个cross，叉积，就能得到uv1这个向量
+    * 所以现在在那个包围盒bounding box里的所有pixel都求一个重心坐标，如果其中有一个点是负值，说明这个点在三角形外，则不画出来
+    *实际代码操作，求出包围盒左下角右上角，通过遍历所有pixel，然后做一个clamp，确定不会超出屏幕，然后做画三角操作
 
-* the polygon is illuminated most brightly when it is orthogonal to the light direction垂直照射，多边形最亮
-* 总结，the intensity of illumination is equal to the scalar product of the light vector and the normal to the giben triangle.the normal to the triangle can be calculated simply as the cross product of its two sides，叉积乘出三角形的垂直向量，然后与光向量做点积得出入射角度
-* 这个课程perform linear computations on the colors，认为color线性增长，但其实128的color并非half as bright as 255， 忽略了其中的误差
+## flat shading render
+* 首先尝试用随机颜色填充了三角形：这之后提供的代码没有使用那个`方法2`画线，那个应该对`点的顺序有要求`，没有提，`TODO:暂时没能成功用方法2画出彩色填充model`
+* `现在添加光`
+  * the polygon is illuminated most brightly when it is orthogonal to the light direction垂直照射，多边形最亮
+  * 如果平行，那将一点光没有。
+  * 总结，the intensity of illumination is equal to the scalar product of the light vector and the normal to the giben triangle.the normal to the triangle can be calculated simply as the cross product of its two sides，叉积乘出三角形的垂直向量，然后与光入射向量做点积得出入射角度
+  * 这个课程perform linear computations on the colors，认为color线性增长，但其实128的color并非half as bright as 255， 忽略了其中的误差
+  * dot product可以为负值negative。这说明光的入射角度在polygon的下方，我们可以直接丢弃相关的三角，可以允许我们快速的删除一些看不见的三角，这叫做`[Back-face culling](http://en.wikipedia.org/wiki/Back-face_culling)`
+  * ![](image/model_light_hole.png)
+  * 注意嘴唇那里有inner cavity of the mouth is drawn on top of the lips.由于dirty clipping of invisible triangles：这种clipping只对convex shapes，凸起的形状 only。将get rid of 摆脱 这种artifact人工造物，当使用z-buffer的时候
+
