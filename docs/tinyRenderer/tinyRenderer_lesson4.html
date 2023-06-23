@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>TinyRenderer-lesson4 - Larning</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson1.html"><strong aria-hidden="true">1.</strong> TinyRenderer-lesson1</a></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson2.html"><strong aria-hidden="true">2.</strong> TinyRenderer-lesson2</a></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson3.html"><strong aria-hidden="true">3.</strong> TinyRenderer-lesson3</a></li><li class="chapter-item expanded "><a href="../tinyRenderer/tinyRenderer_lesson4.html" class="active"><strong aria-hidden="true">4.</strong> TinyRenderer-lesson4</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Larning</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="tinyrenderer笔记-lesson4"><a class="header" href="#tinyrenderer笔记-lesson4"><a href="https://github.com/ssloy/tinyrenderer/wiki/Lesson-4:-Perspective-projection">tinyRenderer笔记-lesson4</a></a></h2>
+<h2 id="2d-几何学"><a class="header" href="#2d-几何学">2d 几何学</a></h2>
+<h3 id="linear-transformations-线性变换"><a class="header" href="#linear-transformations-线性变换">linear transformations 线性变换</a></h3>
+<ul>
+<li>可以写成关系矩阵，corresponding matrix，这个中文翻译都怪怪的，就这样吧</li>
+<li>最简单的是单位阵identity，不干任何事</li>
+<li>对角系数矩阵可以缩放大小,diagonal coefficients of the matrix, slong coordinate axes，沿着坐标系轴向，</li>
+<li>红绿线是unit length vectors 单位长度向量，白色边框通过缩放矩阵会变成黄色的那个</li>
+<li>代码</li>
+<li>在这个表达式(expression)中,变换矩阵(transformation matrix)与前一个表达式中的相同,但是2x5的矩阵实际上就是我们正方体对象的顶点(vertices of our squarish object)。我们简单地取出数组中的所有顶点(multiplied it by the transformation),将其与变换矩阵相乘,就可以得到变换后的对象。</li>
+<li>真实情况是，需要做多次变换，如果正常使用，会无限嵌套比如：</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>vec2 foo(vec2 p) return vec2(ax+by, cx+dy);
+vec2 bar(vec2 p) return vec2(ex+fy, gx+hy);
+[..]
+for (each p in object) {
+    p = foo(bar(p));
+}
+<span class="boring">}</span></code></pre></pre>
+<ul>
+<li>这玩意儿进行了两次线性变换，对每一个顶点，经常我们要折腾vertices in millions，tens of transformations in a row，并不是很稀罕，很常见。这样开销非常昂贵，但在矩阵形式下，就可以提前将变换矩阵乘在一起，然后一次变换所有的顶点。</li>
+<li>For an expression with multiplications only we can put parentheses where we want, can we?对于只有乘法的表达式我们可以任意添加括号么(parentheses)可以，矩阵乘法支持结合律</li>
+<li>另一个对角填数字会导致倾斜，这里叫shearing,切变，中文不是很形象，分别会沿着x轴和y轴倾斜</li>
+<li>而rotation，可以被表现为composite action of three shears，这里白色的先shear到红色，然后到绿色，最后到蓝色，三次shear</li>
+<li>实际上rotation有自己的transform 式子</li>
+<li>注意矩阵乘法不满足交换律</li>
+<li>所以先shear再rotate不等于先rotate再shear</li>
+</ul>
+<h2 id="2d-仿射变换-affine-transformations"><a class="header" href="#2d-仿射变换-affine-transformations">2d 仿射变换 affine transformations</a></h2>
+<ul>
+<li>在线性后添加平移</li>
+<li>可以旋转，缩放，shear，和平移</li>
+<li>但当我们需要处理很多的类似操作时，变得难看了起来</li>
+</ul>
+<h2 id="homogeneous-coordinates齐次坐标"><a class="header" href="#homogeneous-coordinates齐次坐标">Homogeneous coordinates齐次坐标</a></h2>
+<ul>
+<li>将平移的部分translate与前面线性的部分进行组合，组合成3x3矩阵，然后再补充一排001，和1，能得出我们要的结果</li>
+<li>道理上是，原本加上平移变换的整体变换，在2d上是非线性的，因而扩展2d到3d。说明原来的2d部分位于一个z=1的3d平面上，然后做一个3d的线性变换，然后投影到2d平面上去。</li>
+<li>简单的3d投影到2d平面就是通过dividing by the 3d component</li>
+</ul>
+<h2 id="wait-a-second-it-is-forbidden-to-divide-by-zero"><a class="header" href="#wait-a-second-it-is-forbidden-to-divide-by-zero">wait a second, it is forbidden to divide by zero</a></h2>
+<ul>
+<li>这里得注意之前的式子，主要是通过三维的变换，将x,y,1变换成一个新的，并需要/z</li>
+<li>步骤
+<ul>
+<li>embed 2d into 3d，放到plane z = 1</li>
+<li>做点啥我们想的在3d里，这里有点太糊弄人了吧</li>
+<li>对于任意点，我们希望从3d映射回2d，我们画一个直线，在origin和需要Porject的point，然后我们能找到他与plane z=1的交点 intersection</li>
+</ul>
+</li>
+<li>这图里，那个粉红色的是z=1平面，xyz与z平面的交点是x/z,y/z,1</li>
+<li>想象一个垂线经过了xy1,会把xy1映射到xy0</li>
+<li>然后不知道为啥又找了个xy1/2，之后能找到2x,2y,1，这里是通过与xy1/2连线与平面z=1交点是2x，2x，1，但不清楚这一步的意义</li>
+<li>继续，在x,y,1/4上能找到4x,4y,1</li>
+<li>如果我们继续这个过程，直到z = 0，然后projection 越走越远，从xy1,到2x2y1到4x4y1，也就是point xy0被projected onto（投影到） 到一个无限的点，在xy的方向上的一个无限远的点，就是一个向量。我不太清楚这里要表达的意思TODO:这是一个向量这怎么了？这里不明白，感觉没说清楚在干啥，目的是什么？</li>
+<li>齐次坐标系可以区分vector和point，如果programmer 写了个vec2(x,y)是vector还是point。很难说，在齐次坐标系里，所有z=0都是vectors，所有剩下的都是points。</li>
+</ul>
+<h2 id="a-composite-transormation"><a class="header" href="#a-composite-transormation">A composite transormation</a></h2>
+<ul>
+<li>我们现在知道如何平移translate和旋转rotate，因而现在需要在任意位置旋转，只需要先平移回原点，旋转，再平移回来即可，显示的这个M需要左乘，所以是先-x0,-y0最后再加回去</li>
+<li>3d同理</li>
+</ul>
+<h2 id="wait-a-minute-may-i-touch-this-magical-bottom-row-of-the-3x3-matrix"><a class="header" href="#wait-a-minute-may-i-touch-this-magical-bottom-row-of-the-3x3-matrix">Wait a minute, may i touch this magical bottom row of the 3x3 matrix</a></h2>
+<ul>
+<li>现在动一下第三行的数字</li>
+<li>是否记得y-buffer exercise？这里做的是相似的：我们投影我们的2d object 到vertical line x = 0（就是由于是2d的，所以我们的屏幕现在只有一条线，可以理解为屏幕的侧边），将我们的2d形状，投影到x=0的垂线上，强化一些规则：我们必须使用中心投影（TODO:啥？central projection)我们的照相机在5，0位置，并指向了原点。要找到投影,我们需要在相机和要投影的点(黄色)之间绘制直线,并找到与屏幕线(白色垂直线)的交点。要找到投影，需要在相机和要投影的点(yellow)之间找交点</li>
+<li>标准正交投影是一种简单的投影方式,它的特点是:</li>
+</ul>
+<ol>
+<li>平行于投影平面(屏幕)的线段在投影后仍然平行。</li>
+<li>它会保持图像的几何形状不变,只有尺寸会有变化。</li>
+<li>它的变换矩阵是一个简单的缩放矩阵,没有斜方向的因子。</li>
+<li>标准正交投影产生的图像没有透视效果,不同距离的物体 size 的变化比例是一致的。
+标准正交投影的变换矩阵是:
+[s   0   0   0]
+[0   s   0   0]<br />
+[0   0   s   0]
+[0   0   0   1]
+其中s是缩放因子。
+相比而言,透视投影的变换矩阵是:
+[s   0   0   0]<br />
+[0   s   0   0]
+[0   0   s   0]
+[0   0   1/s  0] </li>
+</ol>
+<ul>
+<li>如果我们投影红色物体在屏幕上，使用了标准正交投影（standard orthogonal projection), 我们会得到完全相同的点。看一下how the transformation works: 所有垂直的线段，被变换成垂直的线段，但是那些接近相机的，被拉伸，而远离摄像机的，被压缩。如果我们选择的系数正确（这里选择的是-1/5)，我们会得到一个image in perpective(central) projection，会得到一个透视投影</li>
+</ul>
+<h2 id="time-to-work-in-full-3d"><a class="header" href="#time-to-work-in-full-3d">Time to work in full 3d</a></h2>
+<ul>
+<li>根据之前的变换，得到了变换矩阵</li>
+<li>这个retro-projectionTODO:没理解是什么意思，虽然我大概记得要除以w来得到真实坐标位置</li>
+<li>现在来看一下中心投影central projection， 一个点P xyz, 投影到z= 0，相机在00c的位置</li>
+<li>三角形ABC和ODC是相似的，因而能写出下式，以及y的运算是相似的</li>
+<li>对于这个透视变换，为什么放在w[2]位置就能形成透视变换呢？因为乘起来后，刚好能在结果里得到那个相似三角形的计算结果</li>
+</ul>
+<h2 id="总结今日的公式"><a class="header" href="#总结今日的公式">总结今日的公式</a></h2>
+<ul>
+<li>
+<p>如果根据一个camera来计算central projectiong。camera在z轴，距离c from origin，然后我们扩展到4d by augmenting it with 1，乘那个矩阵，将其投影进3d</p>
+</li>
+<li>
+<p>忽略z坐标就会获得透视效果。但如果要使用z-buffer，就需要使用z</p>
+</li>
+<li>
+<p>TODO:公式和图片后边补充，感觉还有些部分需要整理</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../tinyRenderer/tinyRenderer_lesson3.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../tinyRenderer/tinyRenderer_lesson3.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

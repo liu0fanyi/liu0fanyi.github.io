@@ -83,3 +83,5 @@ for (each p in object) {
 ## 总结今日的公式
 * 如果根据一个camera来计算central projectiong。camera在z轴，距离c from origin，然后我们扩展到4d by augmenting it with 1，乘那个矩阵，将其投影进3d
 * 忽略z坐标就会获得透视效果。但如果要使用z-buffer，就需要使用z
+
+* TODO:公式和图片后边补充，感觉还有些部分需要整理
